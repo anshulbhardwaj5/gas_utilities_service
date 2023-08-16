@@ -13,11 +13,12 @@ from .serializers import CustomerServiceRequestSerializer, RequestTrackingSerial
 
 
 class CustomerServiceRequestView(APIView): 
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # JWTAuthentication is handeled in settings already
     def get(self, request):
         try:
             user_id = request.user.id
+            user_id = 1 #for your testing otherwise I'll get this Id from token
             address = CustomerServiceRequest.objects.filter(user_id = user_id)
             serializer = CustomerServiceRequestSerializer(address, many = True)
             if serializer.data:
@@ -44,13 +45,15 @@ class CustomerServiceRequestView(APIView):
         try:
             data = request.data
             user_id = request.user.id
+            user_id = 1 #for your testing otherwise I'll get this Id from token
             data['user'] = user_id
 
-            if 'attach_files' in request.FILES:
-                aws = Aws_helper() 
-                file_upload_files = aws.upload_s3_bucket("attach_files", request.FILES['attach_files'].name,request.FILES['attach_files'])
-                attached_file = file_upload_files['s3_key']
-                data['attached_file'] = attached_file   
+            #This will work if I Set the AWS_ACCESS_KEY_ID environment variable 
+            # if 'attach_files' in request.FILES:
+            #     aws = Aws_helper() 
+            #     file_upload_files = aws.upload_s3_bucket("attach_files", request.FILES['attach_files'].name,request.FILES['attach_files'])
+            #     attached_file = file_upload_files['s3_key']
+            #     data['attached_file'] = attached_file   
 
             serializer = CustomerServiceRequestSerializer(data = data)
             if serializer.is_valid():

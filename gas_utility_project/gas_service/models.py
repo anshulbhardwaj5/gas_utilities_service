@@ -9,14 +9,14 @@ class User(AbstractUser):
 
 class CustomerServiceRequest(TimeStampedModel): 
     service_title = models.CharField(max_length=100, blank=True, null=True)
-    CUSTOMER_REQUEST_STATUSES = [
+    CUSTOMER_REQUEST_TYPE = [
         ("Gas Leak Issue", "Gas Leak Issue"),
         ("Meter Installation", "Meter Installation"),
         ("Gas Pressure Adjustment", "Gas Pressure Adjustment"),
         ("Gas Ventilation Issues", "Gas Ventilation Issues"),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    type_of_service = models.CharField(choices=CUSTOMER_REQUEST_STATUSES, default="Gas Leak Issue", max_length=100)
+    type_of_service = models.CharField(choices=CUSTOMER_REQUEST_TYPE, default="Gas Leak Issue", max_length=100)
 
     REQUEST_STATUSES = [
         ("Completed", "Completed"),
